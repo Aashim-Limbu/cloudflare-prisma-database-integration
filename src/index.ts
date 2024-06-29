@@ -1,8 +1,11 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
-const client = new PrismaClient().$extends(withAccelerate())
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+		const prisma = new PrismaClient().$extends(withAccelerate());
+		const user = await prisma.user.findMany();
+		return new Response(JSON.stringify({ user }), {
+			headers: { 'Content-Type': 'application/json' },
+		});
 	},
 } satisfies ExportedHandler<Env>;
