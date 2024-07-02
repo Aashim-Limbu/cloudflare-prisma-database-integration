@@ -4,11 +4,11 @@
 	"private": true,
 	"scripts": {
 		"deploy": "wrangler deploy",
+		"env": "dotenv -e .dev.vars",
 		"dev": "wrangler dev",
 		"start": "wrangler dev",
 		"test": "vitest",
-		"cf-typegen": "wrangler types",
-		"env": "dotenv -e .dev.vars"
+		"cf-typegen": "wrangler types"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.4.5",
@@ -20,8 +20,6 @@
 	"dependencies": {
 		"@prisma/client": "^5.16.1",
 		"@prisma/extension-accelerate": "^1.1.0",
-		"dotenv": "^16.4.5",
-		"dotenv-cli": "^7.4.2",
 		"prisma": "^5.16.1"
 	}
 }
