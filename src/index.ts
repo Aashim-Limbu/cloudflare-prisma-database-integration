@@ -1,12 +1,18 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
-
-const prisma = new PrismaClient().$extends(withAccelerate());
+interface Env {
+	DATABASE_URL: string;
+}
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		const user = await prisma.user.findMany({ cacheStrategy: { swr: 10, ttl: 30 } });
-		return new Response(JSON.stringify({ user }), {
-			headers: { 'Content-Type': 'application/json' },
-		});
+	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		const prisma = new PrismaClient({
+			datasources: {
+				db: {
+					url: env.DATABASE_URL,
+				},
+			},
+		}).$extends(withAccelerate());
+		const user = await prisma.user.findMany();
+		return Response.json({ data: { user } });
 	},
 } satisfies ExportedHandler<Env>;
